@@ -11,7 +11,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["jest", "node", "@testing-library/jest-dom"]
+    "types": ["jest", "node", "@testing-library/jest-dom"],
+    "noEmit": true
   },
   "include": ["src", "vite.config.ts"],
   "exclude": ["node_modules"]
