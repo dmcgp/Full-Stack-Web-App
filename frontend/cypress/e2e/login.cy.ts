@@ -1,0 +1,16 @@
+describe('Auth + Add Task Flow', () => {
+  it('logs in, adds and completes a task', () => {
+    cy.visit('/login')
+    cy.get('input[placeholder="Email"]').type('demo@demo.test')
+    cy.get('input[placeholder="Password"]').type('Demo123!')
+    cy.contains('button', 'Login').click()
+    cy.visit('/projects')
+    cy.get('input[placeholder="Add a task"]').type('Buy coffee')
+    cy.contains('button', 'Add').click()
+    cy.contains('Buy coffee')
+    cy.contains('button', 'Done').click()
+    cy.contains('Buy coffee').should('not.exist')
+    cy.visit('/completed')
+    cy.contains('Buy coffee')
+  })
+})

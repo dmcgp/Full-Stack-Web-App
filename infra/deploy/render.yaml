@@ -1,0 +1,14 @@
+services:
+  - name: task-manager-backend
+    type: web
+    env: docker
+    plan: free
+    autoDeploy: true
+    dockerCommand: ["java","-jar","/app/taskmanager.jar"]
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://db:5432/taskmgr
+      - key: SPRING_DATASOURCE_USERNAME
+        value: taskmgr
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: taskmgr

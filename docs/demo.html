@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Task Manager Demo Guide</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; color: #111; }
+    h1, h2 { margin: 0 0 12px; }
+    section { margin-bottom: 24px; }
+    code, pre { background: #f5f5f5; padding: 4px 6px; border-radius: 6px; }
+    pre { padding: 12px; overflow: auto; }
+    a { color: #0b5bd3; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+    .muted { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Task Manager Demo Guide</h1>
+  <p class="muted">Use this page to quickly access the app, API docs, and verify authentication + demo reset flows.</p>
+
+  <section>
+    <h2>Quick Links</h2>
+    <div class="grid">
+      <div class="card">
+        <strong>Frontend App</strong>
+        <div><a href="http://localhost:5173/" target="_blank">http://localhost:5173/</a></div>
+      </div>
+      <div class="card">
+        <strong>Swagger UI</strong>
+        <div><a href="http://localhost:8080/swagger-ui/index.html" target="_blank">http://localhost:8080/swagger-ui/index.html</a></div>
+      </div>
+      <div class="card">
+        <strong>API Health</strong>
+        <div><a href="http://localhost:8080/api/health" target="_blank">http://localhost:8080/api/health</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Demo Credentials</h2>
+    <ul>
+      <li>Email: <code>admin@demo.test</code></li>
+      <li>Password: <code>Admin123!</code></li>
+    </ul>
+    <p class="muted">Use for local demos and to access ADMIN-only endpoints (e.g., <code>POST /api/demo/reset</code>).</p>
+  </section>
+
+  <section>
+    <h2>Verify Authentication (curl)</h2>
+    <p>Login to obtain tokens:</p>
+    <pre><code>curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@demo.test","password":"Admin123!"}'
+</code></pre>
+    <p>Use the <code>accessToken</code> with Bearer auth:</p>
+    <pre><code>curl -X GET "http://localhost:8080/api/tasks" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
+</code></pre>
+    <p>Create a task:</p>
+    <pre><code>curl -X POST "http://localhost:8080/api/tasks" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Make coffee"}'
+</code></pre>
+    <p>Filter by status (uppercase enum):</p>
+    <pre><code>curl -X GET "http://localhost:8080/api/tasks?status=OPEN" \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Demo Reset (ADMIN)</h2>
+    <p>Reset demo data twice (idempotent):</p>
+    <pre><code>curl -X POST http://localhost:8080/api/demo/reset \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
+
+curl -X POST http://localhost:8080/api/demo/reset \
+  -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
+</code></pre>
+  </section>
+
+  <section>
+    <h2>Swagger Tips</h2>
+    <ul>
+      <li>Click <strong>Authorize</strong> and paste <code>Bearer &lt;ACCESS_TOKEN&gt;</code> (include "Bearer ").</li>
+      <li>Use uppercase enums for <code>status</code>: <code>OPEN</code>, <code>IN_PROGRESS</code>, <code>COMPLETED</code>.</li>
+      <li>If requests show "Failed to fetch", ensure backend is running and you are authorized.</li>
+    </ul>
+  </section>
+
+</body>
+</html>

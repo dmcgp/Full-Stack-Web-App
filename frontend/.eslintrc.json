@@ -1,0 +1,7 @@
+{
+  "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  "parserOptions": { "ecmaVersion": 2022, "sourceType": "module" },
+  "settings": { "react": { "version": "detect" } },
+  "env": { "browser": true, "es2021": true, "jest": true },
+  "rules": { "react/react-in-jsx-scope": "off" }
+}

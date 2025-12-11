@@ -1,0 +1,43 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vscode/master/extensions/tasks/v1_5_0/schema.json",
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "frontend:dev",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "options": {"cwd": "${workspaceFolder}/frontend"},
+      "isBackground": true
+    },
+    {
+      "label": "frontend:test",
+      "type": "shell",
+      "command": "npm",
+      "args": ["test", "--", "--ci"],
+      "options": {"cwd": "${workspaceFolder}/frontend"}
+    },
+    {
+      "label": "backend:test",
+      "type": "shell",
+      "command": "mvn",
+      "args": ["-q", "-DskipTests=false", "test"],
+      "options": {"cwd": "${workspaceFolder}/backend"}
+    },
+    {
+      "label": "backend:run (local)",
+      "type": "shell",
+      "command": "pwsh",
+      "args": ["-File", "${workspaceFolder}/backend/run-local.ps1"],
+      "options": {"cwd": "${workspaceFolder}/backend"},
+      "isBackground": true
+    },
+    {
+      "label": "infra:db up",
+      "type": "shell",
+      "command": "docker",
+      "args": ["compose", "-f", "${workspaceFolder}/infra/docker-compose.yml", "up", "-d"],
+      "options": {"cwd": "${workspaceFolder}"}
+    }
+  ]
+}

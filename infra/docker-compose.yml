@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: taskmgr-db
+    environment:
+      POSTGRES_DB: taskmgr
+      POSTGRES_USER: taskmgr
+      POSTGRES_PASSWORD: taskmgr
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskmgr"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: taskmgr-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
