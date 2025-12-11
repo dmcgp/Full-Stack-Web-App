@@ -6,7 +6,12 @@ export const api = axios.create({ baseURL: 'http://localhost:8080/api' })
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().accessToken || localStorage.getItem('accessToken')
   if (token) {
-    config.headers = { ...config.headers, Authorization: `Bearer ${token}` }
+    const headersAny = config.headers as any
+    if (headersAny && typeof headersAny.set === 'function') {
+      headersAny.set('Authorization', `Bearer ${token}`)
+    } else {
+      config.headers = { ...(config.headers as any || {}), Authorization: `Bearer ${token}` }
+    }
   }
   return config
 })
@@ -22,7 +27,12 @@ api.interceptors.response.use(undefined, async (error) => {
         const accessToken = res.data.accessToken
         localStorage.setItem('accessToken', accessToken)
         useAuthStore.setState({ accessToken })
-        original.headers = { ...original.headers, Authorization: `Bearer ${accessToken}` }
+        const originalHeadersAny = original.headers as any
+        if (originalHeadersAny && typeof originalHeadersAny.set === 'function') {
+          originalHeadersAny.set('Authorization', `Bearer ${accessToken}`)
+        } else {
+          original.headers = { ...(original.headers as any || {}), Authorization: `Bearer ${accessToken}` }
+        }
         return api(original)
       } catch (_) {
         useAuthStore.getState().logout()
